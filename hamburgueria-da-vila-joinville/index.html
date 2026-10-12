@@ -7,7 +7,7 @@
 <meta name="description" content="Lanches caprichados, do jeito que você gosta">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#f2a900">
-<meta name="versao" content="20261011111032">
+<meta name="versao" content="20261012002037">
 <link rel="icon" href="logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hamburgueria da Vila: prévia do novo site">
@@ -63,7 +63,17 @@
   .btn-vidro { background: rgba(255, 255, 255, .14); color: #fff; border: 1px solid rgba(255, 255, 255, .4); backdrop-filter: blur(6px); }
   .btn-contorno { background: transparent; color: var(--texto); border: 1.5px solid var(--borda); }
 
-  .promo { background: var(--destaque); color: #141414; text-align: center; font-size: 15px; font-weight: 600; padding: 9px 16px; }
+  /* faixa de promoção: na cor principal, com brilho passando e botão para aproveitar pelo WhatsApp */
+  .promo { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+           background: var(--principal); color: var(--sobre-principal); text-align: center; font-size: 15.5px; font-weight: 800;
+           letter-spacing: .01em; padding: 10px 16px; }
+  .promo::after { content: ''; position: absolute; inset: 0 auto 0 -40%; width: 30%; pointer-events: none;
+                  background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); animation: brilho-promo 3.2s ease-in-out infinite; }
+  @keyframes brilho-promo { 0%, 35% { left: -40%; } 100% { left: 120%; } }
+  .promo .promo-icone { font-size: 18px; }
+  .promo a { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 999px; text-decoration: none; font-size: 13.5px;
+             background: var(--sobre-principal); color: var(--principal); font-weight: 800; }
+  .promo a:hover { filter: brightness(.95); }
 
   /* topo */
   .topo { position: sticky; top: 0; z-index: 20; background: #1c1c1cf2; backdrop-filter: blur(12px); border-bottom: 1px solid var(--borda); }
@@ -120,7 +130,7 @@
     font-family: var(--titulo); font-size: 220px; font-weight: 700; }
   .hero-img.sem img { width: 60%; height: auto; max-height: 60%; object-fit: contain; background: #fff; border-radius: 28px; padding: 28px; }
   /* sem foto nem logo: em vez de uma letra gigante, um cartão com os serviços */
-  .vitrine-capa { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 36px 36px 160px; color: var(--sobre-principal);
+  .vitrine-capa { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 36px; color: var(--sobre-principal);
     background: radial-gradient(circle at 95% 0%, #e63b2e55 0%, transparent 45%), linear-gradient(150deg, var(--principal), var(--escuro)); }
   .vitrine-capa::after { content: ''; position: absolute; right: -70px; bottom: -70px; width: 280px; height: 280px; border-radius: 50%;
     border: 44px solid color-mix(in srgb, var(--sobre-principal) 8%, transparent); }
@@ -133,7 +143,8 @@
     background: color-mix(in srgb, var(--sobre-principal) 11%, transparent); border: 1px solid color-mix(in srgb, var(--sobre-principal) 18%, transparent); }
   .vc-lista small { opacity: .85; font-size: 14px; white-space: nowrap; }
   .vc-lista svg { width: 18px; height: 18px; flex: none; opacity: .85; }
-  .cartao-flutuante { position: absolute; left: -36px; bottom: -28px; width: min(330px, 90%); background: var(--cartao); color: var(--texto);
+  /* fica na coluna do texto, embaixo dos botões: a imagem ao lado fica inteira */
+  .cartao-flutuante { margin-top: 30px; width: min(380px, 100%); background: var(--cartao); color: var(--texto);
     border: 1px solid var(--borda); border-radius: 22px; padding: 20px 22px; box-shadow: 0 30px 60px -25px rgba(0,0,0,.45); }
   .cf-titulo { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--suave); font-weight: 600; }
   .cf-titulo svg { width: 18px; height: 18px; color: var(--acento); }
@@ -356,10 +367,9 @@
     .hero.dividido .container { grid-template-columns: 1fr; gap: 40px; }
     .hero-img { aspect-ratio: 4 / 3; }
     .hero-img.sem { font-size: 140px; }
-    .vitrine-capa { aspect-ratio: auto; padding: 24px 20px 150px; gap: 14px; }
+    .vitrine-capa { aspect-ratio: auto; padding: 24px 20px; gap: 14px; }
     .vc-titulo { font-size: 26px; }
     .vc-lista li { padding: 11px 14px; font-size: 15px; }
-    .cartao-flutuante { left: 12px; bottom: -36px; }
     .faixa .container { grid-template-columns: 1fr; }
     .faixa .item { padding: 16px 4px; }
     .faixa .item + .item { border-left: 0; border-top: 1px solid color-mix(in srgb, var(--sobre-principal) 22%, transparent); }
@@ -392,7 +402,7 @@
 
 <header class="topo">
   <div class="container">
-    <a class="marca" href="#inicio">
+    <a class="marca" href="#inicio" data-editar-imagem="logo">
       <img src="logo.png" alt=""><span>Hamburgueria da Vila</span>
     </a>
     <nav class="menu">
@@ -407,14 +417,14 @@
     
   </div>
 </header>
-<section class="hero cheio com-foto" id="inicio">
+<section data-editar-imagem="capa" class="hero cheio com-foto" id="inicio">
   <div class="hero-foto" style="background-image:url('fotos/1.jpg')"></div>
   
   <div class="container">
     <div class="conteudo">
       <div class="selos"><span class="selo">Hamburgueria · Joinville</span><span class="selo aberto" data-aberto hidden></span></div>
-      <h1>Hamburgueria da Vila</h1>
-      <p class="slogan">Lanches caprichados, do jeito que você gosta</p>
+      <h1 data-editar-texto="titulo">Hamburgueria da Vila</h1>
+      <p class="slogan" data-editar-texto="slogan">Lanches caprichados, do jeito que você gosta</p>
       <div class="acoes">
   
   <a class="btn btn-whats" href="https://wa.me/5547992904993?text=Ol%C3%A1%21%20Vi%20o%20site%20de%20voc%C3%AAs%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener"><svg class="" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 3C8.86 3 3.02 8.83 3.02 16c0 2.3.6 4.53 1.74 6.5L3 29l6.68-1.75A13 13 0 0 0 16.04 29C23.2 29 29 23.17 29 16S23.2 3 16.04 3zm0 23.8c-2 0-3.95-.54-5.65-1.55l-.4-.24-3.97 1.04 1.06-3.86-.26-.4A10.76 10.76 0 0 1 5.24 16c0-5.95 4.85-10.8 10.8-10.8 5.94 0 10.77 4.85 10.77 10.8 0 5.95-4.83 10.8-10.77 10.8zm5.92-8.08c-.32-.16-1.92-.95-2.22-1.06-.3-.11-.51-.16-.73.16-.21.32-.84 1.06-1.03 1.27-.19.22-.38.24-.7.08-.33-.16-1.38-.51-2.62-1.62-.97-.86-1.62-1.93-1.81-2.25-.19-.33-.02-.5.14-.66.15-.14.33-.38.49-.57.16-.19.21-.32.32-.54.11-.21.05-.4-.03-.56-.08-.16-.73-1.76-1-2.41-.26-.63-.53-.55-.73-.56h-.62c-.21 0-.56.08-.86.4-.3.33-1.13 1.11-1.13 2.7 0 1.6 1.16 3.14 1.32 3.36.16.21 2.28 3.48 5.53 4.88.77.34 1.38.54 1.85.69.78.25 1.48.21 2.04.13.62-.09 1.92-.79 2.19-1.55.27-.76.27-1.41.19-1.55-.08-.13-.3-.21-.62-.37z"/></svg>WhatsApp</a>
@@ -439,7 +449,7 @@
     </div></div>
     <div class="item"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><div>
       <small>Horário</small>
-      <strong>Dom: 17:00 às 23:00</strong>
+      <strong>Ter a Sex e Dom: 17:00 às 23:00</strong>
       
     </div></div>
     <div class="item"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div>
@@ -454,8 +464,8 @@
   <div class="container">
     <div class="revelar">
       <div class="olho">Sobre nós</div>
-      <h2>Lanches caprichados, do jeito que você gosta</h2>
-      <p class="lead">O lanche é feito na hora, com ingredientes frescos e porções generosas. Perfeito para matar a fome com sabor.</p>
+      <h2 data-editar-texto="slogan">Lanches caprichados, do jeito que você gosta</h2>
+      <p class="lead" data-editar-texto="sobre">O lanche é feito na hora, com ingredientes frescos e porções generosas. Perfeito para matar a fome com sabor.</p>
       <ul class="lista-servicos">
         <li><span class="ic"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>Hambúrgueres artesanais</li><li><span class="ic"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>Lanches na chapa</li><li><span class="ic"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>Porções</li><li><span class="ic"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>Combos</li><li><span class="ic"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>Bebidas geladas</li><li><span class="ic"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>Delivery</li>
       </ul>
@@ -468,7 +478,7 @@
       
     </div>
     
-    <div class="foto revelar"><img src="fotos/2.jpg" alt="Hamburgueria da Vila"></div>
+    <div class="foto revelar" data-editar-imagem="sobre"><img data-ampliar src="fotos/2.jpg" alt="Hamburgueria da Vila"></div>
     
   </div>
 </section>
@@ -479,7 +489,7 @@
     <div class="cabeca revelar"><div class="olho">Fotos</div><h2>Venha conhecer</h2></div>
     
     <div class="galeria-grade mosaico" style="--colunas:4">
-      <figure><img src="fotos/3.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure><img src="fotos/4.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure><img src="fotos/5.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure><img src="fotos/6.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure><img src="fotos/7.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure>
+      <figure data-editar-imagem="galeria"><img data-ampliar src="fotos/3.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/4.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/5.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/6.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/7.jpg" alt="Foto de Hamburgueria da Vila" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -523,7 +533,7 @@
   <div class="container">
     <div class="cabeca revelar"><div class="olho">Dúvidas</div><h2>Perguntas frequentes</h2></div>
     <div class="faq-lista">
-      <details open><summary>Qual o horário de funcionamento?</summary><p>Dom: 17:00 às 23:00; Seg: Fechado; Ter a Sex: 17:00 às 23:00; Sáb: 18:00 às 23:00.</p></details><details><summary>Tem estacionamento?</summary><p>Sim, há opção de estacionamento.</p></details><details><summary>Onde vocês ficam?</summary><p>R. XV de Novembro, 8015 - Vila Nova, Joinville - SC, 89237-001, Brasil</p></details>
+      <details open><summary>Qual o horário de funcionamento?</summary><p>Seg: Fechado; Ter a Sex: 17:00 às 23:00; Sáb: 18:00 às 23:00; Dom: 17:00 às 23:00.</p></details><details><summary>Tem estacionamento?</summary><p>Sim, há opção de estacionamento.</p></details><details><summary>Onde vocês ficam?</summary><p>R. XV de Novembro, 8015 - Vila Nova, Joinville - SC, 89237-001, Brasil</p></details>
     </div>
   </div>
 </section>
@@ -570,7 +580,7 @@
       <li>R. XV de Novembro, 8015 - Vila Nova, Joinville - SC, 89237-001, Brasil</li>
     </ul></div>
     <div><h4>Horário</h4><ul>
-      <li>Dom: 17:00 às 23:00</li><li>Seg: Fechado</li><li>Ter a Sex: 17:00 às 23:00</li><li>Sáb: 18:00 às 23:00</li>
+      <li>Seg: Fechado</li><li>Ter a Sex: 17:00 às 23:00</li><li>Sáb: 18:00 às 23:00</li><li>Dom: 17:00 às 23:00</li>
     </ul></div>
     <div class="creditos">© 2026 Hamburgueria da Vila. Todos os direitos reservados.</div>
   </div>
@@ -836,5 +846,72 @@
   }
 })();
 </script>
+<style>
+  img[data-ampliar] { cursor: zoom-in; }
+  .ampliar { position: fixed; inset: 0; z-index: 90; background: rgba(8, 8, 10, .92); display: grid; place-items: center; animation: amp-entrar .18s ease both; }
+  .ampliar[hidden] { display: none !important; }
+  @keyframes amp-entrar { from { opacity: 0; } }
+  .ampliar img { max-width: min(1200px, 92vw); max-height: 86vh; object-fit: contain; border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  .ampliar button { position: absolute; border: 0; cursor: pointer; color: #fff; background: rgba(255,255,255,.12); backdrop-filter: blur(6px);
+                    width: 48px; height: 48px; border-radius: 50%; font-size: 30px; line-height: 1; display: grid; place-items: center; }
+  .ampliar button:hover { background: rgba(255,255,255,.24); }
+  .amp-fechar { top: 18px; right: 18px; font-size: 26px !important; }
+  .amp-seta.esq { left: 18px; top: 50%; transform: translateY(-50%); }
+  .amp-seta.dir { right: 18px; top: 50%; transform: translateY(-50%); }
+  .amp-conta { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; font: 600 14px system-ui, sans-serif; opacity: .8; }
+  @media (max-width: 720px) { .amp-seta { display: none !important; } }
+</style>
+<div class="ampliar" id="ampliar" hidden role="dialog" aria-label="Foto ampliada">
+  <button type="button" class="amp-fechar" data-amp-fechar aria-label="Fechar">×</button>
+  <button type="button" class="amp-seta esq" data-amp-ant aria-label="Foto anterior">‹</button>
+  <img alt="">
+  <button type="button" class="amp-seta dir" data-amp-prox aria-label="Próxima foto">›</button>
+  <span class="amp-conta"></span>
+</div>
+<script>
+(function () {
+  // Clicar numa foto abre ela grande; setas, teclado e deslizar (celular) passam para as outras
+  var caixa = document.getElementById('ampliar');
+  if (!caixa) return;
+  var img = caixa.querySelector('img'), conta = caixa.querySelector('.amp-conta'), lista = [], atual = 0;
+  function mostrar(i) {
+    atual = (i + lista.length) % lista.length;
+    img.src = lista[atual].currentSrc || lista[atual].src;
+    conta.textContent = lista.length > 1 ? (atual + 1) + ' de ' + lista.length : '';
+    caixa.querySelectorAll('.amp-seta').forEach(function (b) { b.hidden = lista.length < 2; });
+  }
+  function fechar() { caixa.hidden = true; document.body.classList.remove('travado'); }
+  document.addEventListener('click', function (e) {
+    if (document.documentElement.classList.contains('editando')) return;  // no modo edição, clicar é para trocar
+    var alvo = e.target.closest('img[data-ampliar]');
+    if (!alvo) return;
+    e.preventDefault();
+    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]'));
+    mostrar(lista.indexOf(alvo));
+    caixa.hidden = false;
+    document.body.classList.add('travado');
+  });
+  caixa.addEventListener('click', function (e) {
+    if (e.target === caixa || e.target.closest('[data-amp-fechar]')) fechar();
+    else if (e.target.closest('[data-amp-ant]')) mostrar(atual - 1);
+    else if (e.target.closest('[data-amp-prox]')) mostrar(atual + 1);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (caixa.hidden) return;
+    if (e.key === 'Escape') fechar();
+    if (e.key === 'ArrowLeft') mostrar(atual - 1);
+    if (e.key === 'ArrowRight') mostrar(atual + 1);
+  });
+  var x0 = null;
+  caixa.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  caixa.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40 && lista.length > 1) mostrar(atual + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+})();
+</script>
+
 </body>
 </html>
