@@ -7,7 +7,7 @@
 <meta name="description" content="Um café especial para cada momento do seu dia">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#6f4e37">
-<meta name="versao" content="20261011123320">
+<meta name="versao" content="20261012013341">
 <link rel="icon" href="logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Alles Blau - Cuca e café: prévia do cardápio online">
@@ -80,6 +80,15 @@
             box-shadow: 0 24px 50px -30px rgba(0,0,0,.55); background-size: cover; background-position: center; color: #fff; }
   .banner.sem-foto { background: radial-gradient(circle at 80% 20%, #1e141088 0%, transparent 45%), linear-gradient(120deg, var(--escuro), var(--principal)); }
   .banner.com-foto::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.05) 100%); }
+  .banner-foto { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  /* capa em pé ou pequena: no computador, fundo desfocado com a foto inteira numa moldura à direita */
+  .banner-quadro { display: none; }
+  @media (min-width: 721px) {
+    .banner.estreita .banner-foto { filter: blur(24px) saturate(1.15); transform: scale(1.2); }
+    .banner.estreita .banner-quadro { display: block; position: absolute; z-index: 2; right: 28px; top: 22px; bottom: 22px; border-radius: 16px; overflow: hidden;
+      border: 4px solid rgba(255,255,255,.18); box-shadow: 0 24px 50px -20px rgba(0,0,0,.7); }
+    .banner.estreita .banner-quadro img { display: block; height: 100%; width: auto; max-width: 380px; object-fit: cover; cursor: zoom-in; }
+  }
   .padrao { position: absolute; inset: -40px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; place-items: center;
             font-size: 46px; opacity: .2; transform: rotate(-10deg); pointer-events: none; }
   .padrao span:nth-child(odd) { transform: translateY(22px); }
@@ -190,9 +199,18 @@
   .mapa { border-radius: 14px; overflow: hidden; border: 1px solid var(--borda); min-height: 220px; margin-top: 18px; transition: box-shadow .3s; }
   .mapa.pulsar { box-shadow: 0 0 0 5px var(--principal); }
   .mapa iframe { width: 100%; height: 240px; border: 0; display: block; }
-  .fotos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+  /* galeria: a grade se ajusta à quantidade (uma foto só fica larga, em vez de pequena num canto) */
+  .galeria-local { margin-top: 36px; }
+  .galeria-local h2 { margin-bottom: 14px; }
+  .fotos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .fotos.n1 { grid-template-columns: 1fr; }
+  .fotos.n2 { grid-template-columns: repeat(2, 1fr); }
+  .fotos.n3 { grid-template-columns: repeat(3, 1fr); }
   .fotos figure { margin: 0; min-width: 0; }
   .fotos img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; }
+  .fotos.n1 img { aspect-ratio: 21 / 9; max-height: 460px; }
+  .fotos.n2 img { aspect-ratio: 16 / 10; }
+  .fotos.n3 img { aspect-ratio: 4 / 3; }
   .avaliacoes { margin-top: 36px; }
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .dep { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: 20px; display: grid; gap: 10px; align-content: start; font-size: 15px; }
@@ -277,7 +295,10 @@
     .p-img { width: 96px; height: 96px; font-size: 46px; }
     .cat { scroll-margin-top: 122px; }
     .info { padding: 44px 0; }
-    .fotos { grid-template-columns: repeat(2, 1fr); }
+    .fotos, .fotos.n3 { grid-template-columns: repeat(2, 1fr); }
+    .fotos.n1 { grid-template-columns: 1fr; }
+    .fotos.n1 img { aspect-ratio: 4 / 3; }
+    .fotos.n3 figure:first-child { grid-column: 1 / -1; }
     .painel-fundo { align-items: flex-end; padding: 0; }
     .painel { border-radius: 22px 22px 0 0; max-height: 92vh; }
     .barra-previa { flex-direction: column; gap: 8px; text-align: center; font-size: 13px; padding: 10px 16px; }
@@ -305,10 +326,21 @@
 
 <section class="capa" id="inicio">
   <div class="container">
-    <div data-editar-imagem="capa" class="banner com-foto" style="background-image:url('banner.jpg')">
+    <div data-editar-imagem="capa" class="banner com-foto">
+      <div class="banner-foto" style="background-image:url('banner.jpg')"></div>
+      <div class="banner-quadro"><img src="banner.jpg" data-capa data-ampliar alt="Alles Blau - Cuca e café"></div>
       
       <div class="banner-texto"><span class="olho">Cardápio online</span><p data-editar-texto="slogan">Um café especial para cada momento do seu dia</p></div>
     </div>
+    <script>(function () {
+  var bloco = document.currentScript.previousElementSibling, img = bloco && bloco.querySelector('img[data-capa]');
+  if (!img) return;
+  function ver() {
+    var l = img.naturalWidth, a = img.naturalHeight;
+    if (l && (l / a < 1.25 || l < 1000)) bloco.classList.add('estreita');
+  }
+  if (img.complete) ver(); else img.addEventListener('load', ver);
+})();</script>
     <div class="perfil">
       <div class="logo-box" data-editar-imagem="logo"><img src="logo.png" alt="Alles Blau - Cuca e café"></div>
       <div class="perfil-info">
@@ -470,7 +502,7 @@
       <button class="btn btn-principal largo" type="button" data-finalizar disabled>Finalizar pedido</button>
     </div>
     <div class="caixa lado-info">
-      <div><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span><b>Dom</b> 14:30 às 18:00<br><b>Seg a Sex</b> Fechado<br><b>Sáb</b> 14:30 às 18:00</span></div>
+      <div><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span><b>Seg a Sex</b> Fechado<br><b>Sáb a Dom</b> 14:30 às 18:00</span></div>
       <div><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6h3l3 7.5M9 17.5h5l-2-6H7l-1.5 6M12 11.5l3-5.5"/></svg><span><b>Retirada</b> no local</span></div>
       <div><svg class="" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 3C8.86 3 3.02 8.83 3.02 16c0 2.3.6 4.53 1.74 6.5L3 29l6.68-1.75A13 13 0 0 0 16.04 29C23.2 29 29 23.17 29 16S23.2 3 16.04 3zm0 23.8c-2 0-3.95-.54-5.65-1.55l-.4-.24-3.97 1.04 1.06-3.86-.26-.4A10.76 10.76 0 0 1 5.24 16c0-5.95 4.85-10.8 10.8-10.8 5.94 0 10.77 4.85 10.77 10.8 0 5.95-4.83 10.8-10.77 10.8zm5.92-8.08c-.32-.16-1.92-.95-2.22-1.06-.3-.11-.51-.16-.73.16-.21.32-.84 1.06-1.03 1.27-.19.22-.38.24-.7.08-.33-.16-1.38-.51-2.62-1.62-.97-.86-1.62-1.93-1.81-2.25-.19-.33-.02-.5.14-.66.15-.14.33-.38.49-.57.16-.19.21-.32.32-.54.11-.21.05-.4-.03-.56-.08-.16-.73-1.76-1-2.41-.26-.63-.53-.55-.73-.56h-.62c-.21 0-.56.08-.86.4-.3.33-1.13 1.11-1.13 2.7 0 1.6 1.16 3.14 1.32 3.36.16.21 2.28 3.48 5.53 4.88.77.34 1.38.54 1.85.69.78.25 1.48.21 2.04.13.62-.09 1.92-.79 2.19-1.55.27-.76.27-1.41.19-1.55-.08-.13-.3-.21-.62-.37z"/></svg><span>O pedido chega <b>pronto</b> no WhatsApp da casa</span></div>
     </div>
@@ -500,7 +532,11 @@
       </div>
     </div>
     
-    <div class="fotos"><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/1.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/2.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/3.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/4.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/5.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/6.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/7.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/8.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure></div>
+    
+    <div class="galeria-local">
+      <h2>Nosso espaço</h2>
+      <div class="fotos n4"><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/1.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/2.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/3.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/4.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/5.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/6.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/7.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/8.jpg" alt="Foto de Alles Blau - Cuca e café" loading="lazy"></figure></div>
+    </div>
     
     
     <div class="avaliacoes" id="avaliacoes">
@@ -869,7 +905,8 @@ Recomendo!”</p><span class="autor">Medina</span></div>
     var alvo = e.target.closest('img[data-ampliar]');
     if (!alvo) return;
     e.preventDefault();
-    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]'));
+    // só as fotos visíveis (a moldura da capa fica escondida quando a capa já é larga)
+    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]')).filter(function (i) { return i.offsetParent !== null; });
     mostrar(lista.indexOf(alvo));
     caixa.hidden = false;
     document.body.classList.add('travado');
