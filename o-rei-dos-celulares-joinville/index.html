@@ -7,7 +7,7 @@
 <meta name="description" content="Conserto rápido e com garantia">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#3a0ca3">
-<meta name="versao" content="20261011125059">
+<meta name="versao" content="20261012013206">
 <link rel="icon" href="logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="O Rei dos Celulares: prévia do novo site">
@@ -118,6 +118,16 @@
     display: grid; place-items: center; padding: 36px; box-shadow: 0 40px 80px -30px rgba(0,0,0,.5); z-index: 2; }
   .hero-logo img { max-height: 100%; object-fit: contain; }
   .hero.cheio .conteudo { position: relative; z-index: 3; max-width: 700px; padding: 96px 0; }
+  /* capa em pé ou pequena (as do Instagram e do Facebook): no computador, o fundo vira a própria foto desfocada
+     e a foto aparece inteira e nítida numa moldura ao lado do texto, em vez de esticada e cortada */
+  .hero-quadro { display: none; }
+  @media (min-width: 861px) {
+    .hero.estreita .hero-foto { filter: blur(28px) saturate(1.15); transform: scale(1.15); }
+    .hero.estreita .container { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+    .hero.estreita .hero-quadro { display: block; position: relative; z-index: 3; flex: 0 0 auto; height: min(500px, 72vh); border-radius: 28px;
+      overflow: hidden; border: 6px solid rgba(255,255,255,.16); box-shadow: 0 40px 90px -30px rgba(0,0,0,.75); }
+    .hero.estreita .hero-quadro img { display: block; height: 100%; width: auto; max-width: 520px; object-fit: cover; cursor: zoom-in; }
+  }
 
   .hero.dividido { padding: 72px 0 88px; background: radial-gradient(circle at 100% 0%, #d2c7ee 0%, transparent 55%), var(--fundo); }
   .hero.dividido .container { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
@@ -460,7 +470,7 @@
     </div></div>
     <div class="item"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><div>
       <small>Horário</small>
-      <strong>Dom a Seg: Fechado</strong>
+      <strong>Ter a Sex: 09:00 às 18:00</strong>
       
     </div></div>
     <div class="item"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div>
@@ -569,7 +579,7 @@ Com toda certeza indico de olhos fechados, sem falar na loja que é  super linda
   <div class="container">
     <div class="cabeca revelar"><div class="olho">Dúvidas</div><h2>Perguntas frequentes</h2></div>
     <div class="faq-lista">
-      <details open><summary>Como peço um orçamento?</summary><p>Preencha o formulário com o que você precisa e envie pelo WhatsApp. A gente responde por lá.</p></details><details><summary>Quais formas de pagamento vocês aceitam?</summary><p>Aceitamos cartão de crédito, cartão de débito e pagamento por aproximação.</p></details><details><summary>Qual o horário de funcionamento?</summary><p>Dom a Seg: Fechado; Ter a Sex: 09:00 às 18:00; Sáb: 09:00 às 13:00.</p></details><details><summary>Tem estacionamento?</summary><p>Sim, há opção de estacionamento.</p></details><details><summary>Onde vocês ficam?</summary><p>R. Dr. João Colin, 507 - Centro, Joinville - SC, 89201-299, Brasil</p></details>
+      <details open><summary>Como peço um orçamento?</summary><p>Preencha o formulário com o que você precisa e envie pelo WhatsApp. A gente responde por lá.</p></details><details><summary>Quais formas de pagamento vocês aceitam?</summary><p>Aceitamos cartão de crédito, cartão de débito e pagamento por aproximação.</p></details><details><summary>Qual o horário de funcionamento?</summary><p>Seg: Fechado; Ter a Sex: 09:00 às 18:00; Sáb: 09:00 às 13:00; Dom: Fechado.</p></details><details><summary>Tem estacionamento?</summary><p>Sim, há opção de estacionamento.</p></details><details><summary>Onde vocês ficam?</summary><p>R. Dr. João Colin, 507 - Centro, Joinville - SC, 89201-299, Brasil</p></details>
     </div>
   </div>
 </section>
@@ -616,7 +626,7 @@ Com toda certeza indico de olhos fechados, sem falar na loja que é  super linda
       <li>R. Dr. João Colin, 507 - Centro, Joinville - SC, 89201-299, Brasil</li>
     </ul></div>
     <div><h4>Horário</h4><ul>
-      <li>Dom a Seg: Fechado</li><li>Ter a Sex: 09:00 às 18:00</li><li>Sáb: 09:00 às 13:00</li>
+      <li>Seg: Fechado</li><li>Ter a Sex: 09:00 às 18:00</li><li>Sáb: 09:00 às 13:00</li><li>Dom: Fechado</li>
     </ul></div>
     <div class="creditos">© 2026 O Rei dos Celulares. Todos os direitos reservados.</div>
   </div>
@@ -922,7 +932,8 @@ Com toda certeza indico de olhos fechados, sem falar na loja que é  super linda
     var alvo = e.target.closest('img[data-ampliar]');
     if (!alvo) return;
     e.preventDefault();
-    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]'));
+    // só as fotos visíveis (a moldura da capa fica escondida quando a capa já é larga)
+    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]')).filter(function (i) { return i.offsetParent !== null; });
     mostrar(lista.indexOf(alvo));
     caixa.hidden = false;
     document.body.classList.add('travado');
