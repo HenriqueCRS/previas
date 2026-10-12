@@ -7,7 +7,7 @@
 <meta name="description" content="Lanches caprichados, do jeito que você gosta">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#ea8500">
-<meta name="versao" content="20261010221532">
+<meta name="versao" content="20261012013522">
 <link rel="icon" href="logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ninja Hamburgueria - Burgers e Hot Dogs: prévia do cardápio online">
@@ -80,6 +80,15 @@
             box-shadow: 0 24px 50px -30px rgba(0,0,0,.55); background-size: cover; background-position: center; color: #fff; }
   .banner.sem-foto { background: radial-gradient(circle at 80% 20%, #81490088 0%, transparent 45%), linear-gradient(120deg, var(--escuro), var(--principal)); }
   .banner.com-foto::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.05) 100%); }
+  .banner-foto { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  /* capa em pé ou pequena: no computador, fundo desfocado com a foto inteira numa moldura à direita */
+  .banner-quadro { display: none; }
+  @media (min-width: 721px) {
+    .banner.estreita .banner-foto { filter: blur(24px) saturate(1.15); transform: scale(1.2); }
+    .banner.estreita .banner-quadro { display: block; position: absolute; z-index: 2; right: 28px; top: 22px; bottom: 22px; border-radius: 16px; overflow: hidden;
+      border: 4px solid rgba(255,255,255,.18); box-shadow: 0 24px 50px -20px rgba(0,0,0,.7); }
+    .banner.estreita .banner-quadro img { display: block; height: 100%; width: auto; max-width: 380px; object-fit: cover; cursor: zoom-in; }
+  }
   .padrao { position: absolute; inset: -40px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; place-items: center;
             font-size: 46px; opacity: .2; transform: rotate(-10deg); pointer-events: none; }
   .padrao span:nth-child(odd) { transform: translateY(22px); }
@@ -190,8 +199,18 @@
   .mapa { border-radius: 14px; overflow: hidden; border: 1px solid var(--borda); min-height: 220px; margin-top: 18px; transition: box-shadow .3s; }
   .mapa.pulsar { box-shadow: 0 0 0 5px var(--principal); }
   .mapa iframe { width: 100%; height: 240px; border: 0; display: block; }
-  .fotos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+  /* galeria: a grade se ajusta à quantidade (uma foto só fica larga, em vez de pequena num canto) */
+  .galeria-local { margin-top: 36px; }
+  .galeria-local h2 { margin-bottom: 14px; }
+  .fotos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .fotos.n1 { grid-template-columns: 1fr; }
+  .fotos.n2 { grid-template-columns: repeat(2, 1fr); }
+  .fotos.n3 { grid-template-columns: repeat(3, 1fr); }
+  .fotos figure { margin: 0; min-width: 0; }
   .fotos img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; }
+  .fotos.n1 img { aspect-ratio: 21 / 9; max-height: 460px; }
+  .fotos.n2 img { aspect-ratio: 16 / 10; }
+  .fotos.n3 img { aspect-ratio: 4 / 3; }
   .avaliacoes { margin-top: 36px; }
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .dep { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: 20px; display: grid; gap: 10px; align-content: start; font-size: 15px; }
@@ -276,7 +295,10 @@
     .p-img { width: 96px; height: 96px; font-size: 46px; }
     .cat { scroll-margin-top: 122px; }
     .info { padding: 44px 0; }
-    .fotos { grid-template-columns: repeat(2, 1fr); }
+    .fotos, .fotos.n3 { grid-template-columns: repeat(2, 1fr); }
+    .fotos.n1 { grid-template-columns: 1fr; }
+    .fotos.n1 img { aspect-ratio: 4 / 3; }
+    .fotos.n3 figure:first-child { grid-column: 1 / -1; }
     .painel-fundo { align-items: flex-end; padding: 0; }
     .painel { border-radius: 22px 22px 0 0; max-height: 92vh; }
     .barra-previa { flex-direction: column; gap: 8px; text-align: center; font-size: 13px; padding: 10px 16px; }
@@ -304,14 +326,25 @@
 
 <section class="capa" id="inicio">
   <div class="container">
-    <div class="banner com-foto" style="background-image:url('banner.jpg')">
+    <div data-editar-imagem="capa" class="banner com-foto">
+      <div class="banner-foto" style="background-image:url('banner.jpg')"></div>
+      <div class="banner-quadro"><img src="banner.jpg" data-capa data-ampliar alt="Ninja Hamburgueria - Burgers e Hot Dogs"></div>
       
-      <div class="banner-texto"><span class="olho">Cardápio online</span><p>Lanches caprichados, do jeito que você gosta</p></div>
+      <div class="banner-texto"><span class="olho">Cardápio online</span><p data-editar-texto="slogan">Lanches caprichados, do jeito que você gosta</p></div>
     </div>
+    <script>(function () {
+  var bloco = document.currentScript.previousElementSibling, img = bloco && bloco.querySelector('img[data-capa]');
+  if (!img) return;
+  function ver() {
+    var l = img.naturalWidth, a = img.naturalHeight;
+    if (l && (l / a < 1.25 || l < 1000)) bloco.classList.add('estreita');
+  }
+  if (img.complete) ver(); else img.addEventListener('load', ver);
+})();</script>
     <div class="perfil">
-      <div class="logo-box"><img src="logo.png" alt="Ninja Hamburgueria - Burgers e Hot Dogs"></div>
+      <div class="logo-box" data-editar-imagem="logo"><img src="logo.png" alt="Ninja Hamburgueria - Burgers e Hot Dogs"></div>
       <div class="perfil-info">
-        <h1 class="longo">Ninja Hamburgueria - Burgers e Hot Dogs</h1>
+        <h1 class="longo" data-editar-texto="titulo">Ninja Hamburgueria - Burgers e Hot Dogs</h1>
         <div class="meta">
           <span class="status" data-aberto hidden></span>
           <span><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Iririú, Joinville</span>
@@ -344,25 +377,25 @@
         
         <article class="produto" data-i="0" tabindex="0" aria-label="Hayabusa, R$ 38,00">
           <div class="p-info"><h3>Hayabusa</h3><p>Se está em dúvida vai de Hayabusa! Dois hambúrgueres com Cheddar, Molho Fry, Picles e Maionese no Pão Brioche…</p><strong>R$ 38,00</strong></div>
-          <div class="p-img"><img src="produtos/a3eaf48e2b97.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Hayabusa"><img src="produtos/a3eaf48e2b97.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Hayabusa à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="1" tabindex="0" aria-label="Milkshake de Ninho e Nutella, R$ 22,00">
           <div class="p-info"><h3>Milkshake de Ninho e Nutella</h3><p>Creme de Ninho, Nutella Original e Sorvete; 3 ingredientes, sem enrolação. Utilizamos 100% creme americano, sem adição…</p><strong>R$ 22,00</strong></div>
-          <div class="p-img"><img src="produtos/19d7850815d4.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Milkshake de Ninho e Nutella"><img src="produtos/19d7850815d4.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Milkshake de Ninho e Nutella à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="2" tabindex="0" aria-label="Dog Completasso, R$ 32,00">
           <div class="p-info"><h3>Dog Completasso</h3><p>Dog prensado e recheado sem economia: Frango cremoso, Bacon e Catupiry — na nossa base de dog que são duas salsichas…</p><strong>R$ 32,00</strong></div>
-          <div class="p-img"><img src="produtos/26b585f77673.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Dog Completasso"><img src="produtos/26b585f77673.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Dog Completasso à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="3" tabindex="0" aria-label="Açaí Nutelovers (Açaí, Leite em Pó, Creme Ninho e Nutella), R$ 26,00">
           <div class="p-info"><h3>Açaí Nutelovers (Açaí, Leite em Pó, Creme Ninho e Nutella)</h3><p>Açaí Cremoso com Leite em Pó, Creme de Ninho e Nutella Original. Montado com equilíbrio para unir o açaí com a Nutella…</p><strong>R$ 26,00</strong></div>
-          <div class="p-img"><img src="produtos/f5338043ba61.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Açaí Nutelovers (Açaí, Leite em Pó, Creme Ninho e Nutella)"><img src="produtos/f5338043ba61.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Açaí Nutelovers (Açaí, Leite em Pó, Creme Ninho e Nutella) à sacola">+</button></div>
         </article>
         
@@ -375,25 +408,25 @@
         
         <article class="produto" data-i="4" tabindex="0" aria-label="PROMO DE TERÇA - Compre 2 Leve 3, R$ 40,00">
           <div class="p-info"><h3>PROMO DE TERÇA - Compre 2 Leve 3</h3><p>Na compra de 2 Dog Clássicos você leva o terceiro por nossa conta! Promo exclusiva para delivery/retirada</p><strong>R$ 40,00</strong></div>
-          <div class="p-img"><img src="produtos/3de347cadfe9.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="PROMO DE TERÇA - Compre 2 Leve 3"><img src="produtos/3de347cadfe9.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar PROMO DE TERÇA - Compre 2 Leve 3 à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="5" tabindex="0" aria-label="COMBO COM REFRI GRÁTIS, R$ 33,00">
           <div class="p-info"><h3>COMBO COM REFRI GRÁTIS</h3><p>Comprando 1 Lanche da sua escolha + 1 Batata + 1 Molho você ganha um Refri Lata por nossa conta! Promo exclusiva para…</p><strong>R$ 33,00</strong></div>
-          <div class="p-img"><img src="produtos/57e20e4d110d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="COMBO COM REFRI GRÁTIS"><img src="produtos/57e20e4d110d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar COMBO COM REFRI GRÁTIS à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="6" tabindex="0" aria-label="LEVE 2 DOGS COM MOLHO E GANHE COCA 600ML GRÁTIS, R$ 46,00">
           <div class="p-info"><h3>LEVE 2 DOGS COM MOLHO E GANHE COCA 600ML GRÁTIS</h3><p>Escolha 2 Dogs e 2 Molhos da sua preferência e ganhe uma Coca 600ml! Promo exclusiva para delivery/retirada</p><strong>R$ 46,00</strong></div>
-          <div class="p-img"><img src="produtos/dd02dddfd558.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="LEVE 2 DOGS COM MOLHO E GANHE COCA 600ML GRÁTIS"><img src="produtos/dd02dddfd558.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar LEVE 2 DOGS COM MOLHO E GANHE COCA 600ML GRÁTIS à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="7" tabindex="0" aria-label="LEVE 2 DOGS + COCA 600ML E GANHE BATATA GRÁTIS, R$ 57,00">
           <div class="p-info"><h3>LEVE 2 DOGS + COCA 600ML E GANHE BATATA GRÁTIS</h3><p>Escolha 2 Dogs com molhos e 1 Coca 600ml da sua preferência e ganhe uma batata chips! Promo exclusiva para…</p><strong>R$ 57,00</strong></div>
-          <div class="p-img"><img src="produtos/2f879cf64ae3.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="LEVE 2 DOGS + COCA 600ML E GANHE BATATA GRÁTIS"><img src="produtos/2f879cf64ae3.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar LEVE 2 DOGS + COCA 600ML E GANHE BATATA GRÁTIS à sacola">+</button></div>
         </article>
         
@@ -406,49 +439,49 @@
         
         <article class="produto" data-i="8" tabindex="0" aria-label="Kill Bill, R$ 38,00">
           <div class="p-info"><h3>Kill Bill</h3><p>Para quem tem fome de verdade, o Kill Bill traz dois hambúrgueres Angus de 120g cada, queijo cheddar, alface, tomate…</p><strong>R$ 38,00</strong></div>
-          <div class="p-img"><img src="produtos/73876b5cb6d4.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Kill Bill"><img src="produtos/73876b5cb6d4.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Kill Bill à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="9" tabindex="0" aria-label="Burger, R$ 24,00">
           <div class="p-info"><h3>Burger</h3><p>Pão, Carne e Queijo. Pão tradicional, nosso hambúrguer 100% bovino Angus coberto por mussarela derretida e maionese…</p><strong>R$ 24,00</strong></div>
-          <div class="p-img"><img src="produtos/468c1d07b266.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Burger"><img src="produtos/468c1d07b266.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Burger à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="10" tabindex="0" aria-label="Bonsai, R$ 28,00">
           <div class="p-info"><h3>Bonsai</h3><p>Para os que preferem o clássico dos clássicos, o Bonsai combina hambúrguer Angus de 120g, queijo mussarela, maionese…</p><strong>R$ 28,00</strong></div>
-          <div class="p-img"><img src="produtos/3ecd66a9d2ac.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Bonsai"><img src="produtos/3ecd66a9d2ac.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Bonsai à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="11" tabindex="0" aria-label="Tori, R$ 30,00">
           <div class="p-info"><h3>Tori</h3><p>Não só de hambúrguer vive o homem! Pão fofinho, frango sassami empanado, alface, picles, maionese da casa e molho fry!</p><strong>R$ 30,00</strong></div>
-          <div class="p-img"><img src="produtos/44157ea51027.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Tori"><img src="produtos/44157ea51027.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Tori à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="12" tabindex="0" aria-label="Mestre Bacon, R$ 30,00">
           <div class="p-info"><h3>Mestre Bacon</h3><p>O Mestre Bacon é especial para os lovers bacon! Pão fofinho, hambúrguer Angus de 120g, queijo cheddar, molho de…</p><strong>R$ 30,00</strong></div>
-          <div class="p-img"><img src="produtos/8a49168b15ba.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Mestre Bacon"><img src="produtos/8a49168b15ba.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Mestre Bacon à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="13" tabindex="0" aria-label="Koga, R$ 40,00">
           <div class="p-info"><h3>Koga</h3><p>O Koga é ousadia pura! Pão de Brioche com maionese verde, 2 hambúrgueres Angus de (120g cada), cheddar em fatias e…</p><strong>R$ 40,00</strong></div>
-          <div class="p-img"><img src="produtos/92214c539a19.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Koga"><img src="produtos/92214c539a19.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Koga à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="14" tabindex="0" aria-label="Haru, R$ 48,00">
           <div class="p-info"><h3>Haru</h3><p>Se um é pouco, três é demais! O Haru vem com pão de brioche, 3 hambúrgueres Angus de 120g cada, cheddar em fatias…</p><strong>R$ 48,00</strong></div>
-          <div class="p-img"><img src="produtos/4445e1155a9b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Haru"><img src="produtos/4445e1155a9b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Haru à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="15" tabindex="0" aria-label="Monte seu Burger, R$ 24,50">
           <div class="p-info"><h3>Monte seu Burger</h3><p>Seja o mestre do seu burger, escolha seus ingredientes favoritos e crie a combinação perfeita. Afinal, quando é do seu…</p><strong>R$ 24,50</strong></div>
-          <div class="p-img"><img src="produtos/1fd71ab3d200.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Monte seu Burger"><img src="produtos/1fd71ab3d200.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Monte seu Burger à sacola">+</button></div>
         </article>
         
@@ -461,31 +494,31 @@
         
         <article class="produto" data-i="16" tabindex="0" aria-label="Dog Clássico, R$ 20,00">
           <div class="p-info"><h3>Dog Clássico</h3><p>Hot Dog prensado, recheado com: 2 salsichas, tomate picado, batata palha, maionese e ketchup. Simples e delicioso!</p><strong>R$ 20,00</strong></div>
-          <div class="p-img"><img src="produtos/0804d3ef3611.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Dog Clássico"><img src="produtos/0804d3ef3611.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Dog Clássico à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="17" tabindex="0" aria-label="Dog Mega Queijo, R$ 28,00">
           <div class="p-info"><h3>Dog Mega Queijo</h3><p>Um verdadeiro queijo explosion! Hot Dog prensado, recheado com: 2 salsichas, tomate picado, Catupiry, Molho de Cheddar…</p><strong>R$ 28,00</strong></div>
-          <div class="p-img"><img src="produtos/082c68d83ffc.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Dog Mega Queijo"><img src="produtos/082c68d83ffc.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Dog Mega Queijo à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="18" tabindex="0" aria-label="Dog Frango Cremoso, R$ 29,00">
           <div class="p-info"><h3>Dog Frango Cremoso</h3><p>Hot Dog prensado, recheado com: 2 salsichas com frango desfiado cremoso, catupiry, batata palha, tomate picado…</p><strong>R$ 29,00</strong></div>
-          <div class="p-img"><img src="produtos/80780ce0e36b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Dog Frango Cremoso"><img src="produtos/80780ce0e36b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Dog Frango Cremoso à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="19" tabindex="0" aria-label="Dog Bacon Cheddar, R$ 29,00">
           <div class="p-info"><h3>Dog Bacon Cheddar</h3><p>Hot Dog prensado, recheado com: 2 salsichas, tomate picado, bacon, creme de cheddar, batata palha, maionese e ketchup…</p><strong>R$ 29,00</strong></div>
-          <div class="p-img"><img src="produtos/6f1ceedfff70.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Dog Bacon Cheddar"><img src="produtos/6f1ceedfff70.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Dog Bacon Cheddar à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="20" tabindex="0" aria-label="Dog das Montanhas, R$ 32,00">
           <div class="p-info"><h3>Dog das Montanhas</h3><p>Um hot dog que casou com um hambúrguer! Recheado com: 2 salsichas, tomate picado, um hambúrguer artesanal com cheddar…</p><strong>R$ 32,00</strong></div>
-          <div class="p-img"><img src="produtos/8cc3651771cc.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Dog das Montanhas"><img src="produtos/8cc3651771cc.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Dog das Montanhas à sacola">+</button></div>
         </article>
         
@@ -498,31 +531,31 @@
         
         <article class="produto" data-i="21" tabindex="0" aria-label="Batata Chips, R$ 10,00">
           <div class="p-info"><h3>Batata Chips</h3><p>Batatas Fritas fininhas e crocantes feitas pelos ninjas.</p><strong>R$ 10,00</strong></div>
-          <div class="p-img"><img src="produtos/8eefc14cc998.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Batata Chips"><img src="produtos/8eefc14cc998.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Batata Chips à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="22" tabindex="0" aria-label="Batata Palito, R$ 14,00">
           <div class="p-info"><h3>Batata Palito</h3><p>Batatas Fritas Palito em formato Crinkle.</p><strong>R$ 14,00</strong></div>
-          <div class="p-img"><img src="produtos/b29e73f6ff3c.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Batata Palito"><img src="produtos/b29e73f6ff3c.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Batata Palito à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="23" tabindex="0" aria-label="Franguinho Empanado, R$ 16,00">
           <div class="p-info"><h3>Franguinho Empanado</h3><p>Porção com 6 unidades de peito de frango empanado frito.</p><strong>R$ 16,00</strong></div>
-          <div class="p-img"><img src="produtos/9055484c067e.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Franguinho Empanado"><img src="produtos/9055484c067e.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Franguinho Empanado à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="24" tabindex="0" aria-label="Batata Palito + Cheddar e Bacon, R$ 16,00">
           <div class="p-info"><h3>Batata Palito + Cheddar e Bacon</h3><p>Batatas Fritas Palito em formato Crinkle com cheddar cremoso e farofa de bacon.</p><strong>R$ 16,00</strong></div>
-          <div class="p-img"><img src="produtos/4a144fe9a925.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Batata Palito + Cheddar e Bacon"><img src="produtos/4a144fe9a925.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Batata Palito + Cheddar e Bacon à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="25" tabindex="0" aria-label="Onion Rings, R$ 12,00">
           <div class="p-info"><h3>Onion Rings</h3><p>Porção com 8 unidades.</p><strong>R$ 12,00</strong></div>
-          <div class="p-img"><img src="produtos/1295553203b7.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Onion Rings"><img src="produtos/1295553203b7.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Onion Rings à sacola">+</button></div>
         </article>
         
@@ -535,43 +568,43 @@
         
         <article class="produto" data-i="26" tabindex="0" aria-label="Monte seu Açaí, R$ 22,00">
           <div class="p-info"><h3>Monte seu Açaí</h3><p>Um delicioso copo de Açaí. Você pode escolher até 4 complementos nas opções por nossa conta!</p><strong>R$ 22,00</strong></div>
-          <div class="p-img"><img src="produtos/7ea7853b4245.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Monte seu Açaí"><img src="produtos/7ea7853b4245.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Monte seu Açaí à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="27" tabindex="0" aria-label="Açaí Zoro Clássic (Açaí, Banana, Granola, e Leite Condensado), R$ 20,00">
           <div class="p-info"><h3>Açaí Zoro Clássic (Açaí, Banana, Granola, e Leite Condensado)</h3><p>Saboreie o Açaí Zoro Clássic, uma mistura deliciosa de açaí cremoso, banana, granola e leite condensado. Um dos…</p><strong>R$ 20,00</strong></div>
-          <div class="p-img"><img src="produtos/1042f7d19505.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Açaí Zoro Clássic (Açaí, Banana, Granola, e Leite Condensado)"><img src="produtos/1042f7d19505.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Açaí Zoro Clássic (Açaí, Banana, Granola, e Leite Condensado) à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="28" tabindex="0" aria-label="Milkshake de Ovomaltine, R$ 20,00">
           <div class="p-info"><h3>Milkshake de Ovomaltine</h3><p>Copo de 400ml.</p><strong>R$ 20,00</strong></div>
-          <div class="p-img"><img src="produtos/c7d759494d1d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Milkshake de Ovomaltine"><img src="produtos/c7d759494d1d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Milkshake de Ovomaltine à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="29" tabindex="0" aria-label="Milkshake de Paçoca, R$ 20,00">
           <div class="p-info"><h3>Milkshake de Paçoca</h3><p>Copo de 400ml.</p><strong>R$ 20,00</strong></div>
-          <div class="p-img"><img src="produtos/02695358782b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Milkshake de Paçoca"><img src="produtos/02695358782b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Milkshake de Paçoca à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="30" tabindex="0" aria-label="Milkshake de Morango, R$ 20,00">
           <div class="p-info"><h3>Milkshake de Morango</h3><p>Com pedaços de fruta, Copo de 400ml.</p><strong>R$ 20,00</strong></div>
-          <div class="p-img"><img src="produtos/b4a8b4b1ee4c.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Milkshake de Morango"><img src="produtos/b4a8b4b1ee4c.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Milkshake de Morango à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="31" tabindex="0" aria-label="Milkshake de Chocolate, R$ 20,00">
           <div class="p-info"><h3>Milkshake de Chocolate</h3><p>Copo de 400ml.</p><strong>R$ 20,00</strong></div>
-          <div class="p-img"><img src="produtos/0abbb7f03fed.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Milkshake de Chocolate"><img src="produtos/0abbb7f03fed.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Milkshake de Chocolate à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="32" tabindex="0" aria-label="Brownie de Ninho, R$ 12,00">
           <div class="p-info"><h3>Brownie de Ninho</h3><p>Um delicioso brownie recheado de creme de ninho de 90g.</p><strong>R$ 12,00</strong></div>
-          <div class="p-img"><img src="produtos/d50d1dd8eb87.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Brownie de Ninho"><img src="produtos/d50d1dd8eb87.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Brownie de Ninho à sacola">+</button></div>
         </article>
         
@@ -584,43 +617,43 @@
         
         <article class="produto" data-i="33" tabindex="0" aria-label="Piscininha de Cheddar, R$ 12,00">
           <div class="p-info"><h3>Piscininha de Cheddar</h3><p>Um potinho de 130g do nosso delicioso molho de cheddar feito pelos ninjas!</p><strong>R$ 12,00</strong></div>
-          <div class="p-img"><img src="produtos/dca4413497ad.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Piscininha de Cheddar"><img src="produtos/dca4413497ad.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Piscininha de Cheddar à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="34" tabindex="0" aria-label="Piscininha de Cheddar com Farofa de Bacon, R$ 15,00">
           <div class="p-info"><h3>Piscininha de Cheddar com Farofa de Bacon</h3><p>Um potinho de 130g do nosso delicioso molho de cheddar feito pelos ninjas e com farofa de bacon!</p><strong>R$ 15,00</strong></div>
-          <div class="p-img"><img src="produtos/23df3f0db0af.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Piscininha de Cheddar com Farofa de Bacon"><img src="produtos/23df3f0db0af.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Piscininha de Cheddar com Farofa de Bacon à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="35" tabindex="0" aria-label="Potinho de Creme de Cheddar, R$ 5,00">
           <div class="p-info"><h3>Potinho de Creme de Cheddar</h3><p>Creme de cheddar feito artesanalmente pelos ninjas, irresistível!</p><strong>R$ 5,00</strong></div>
-          <div class="p-img"><img src="produtos/4d32c4e7de3d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Potinho de Creme de Cheddar"><img src="produtos/4d32c4e7de3d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Potinho de Creme de Cheddar à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="36" tabindex="0" aria-label="Potinho de Maionese Verde, R$ 3,00">
           <div class="p-info"><h3>Potinho de Maionese Verde</h3><p>A receita original dos ninjas da maionese favorita da galera.</p><strong>R$ 3,00</strong></div>
-          <div class="p-img"><img src="produtos/bceae6850346.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Potinho de Maionese Verde"><img src="produtos/bceae6850346.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Potinho de Maionese Verde à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="37" tabindex="0" aria-label="Potinho de Molho Fry, R$ 3,00">
           <div class="p-info"><h3>Potinho de Molho Fry</h3><p>O molho mais famoso do mundo para acompanhar batatas e burgers.</p><strong>R$ 3,00</strong></div>
-          <div class="p-img"><img src="produtos/4e9c4e08eda6.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Potinho de Molho Fry"><img src="produtos/4e9c4e08eda6.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Potinho de Molho Fry à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="38" tabindex="0" aria-label="Potinho de Geléia Flamejante, R$ 3,00">
           <div class="p-info"><h3>Potinho de Geléia Flamejante</h3><p>O molho secreto desenvolvido pelos ninjas para acompanhar bem TUDO, levemente adocicado e levemente apimentado.</p><strong>R$ 3,00</strong></div>
-          <div class="p-img"><img src="produtos/b3aee7ee4fc3.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Potinho de Geléia Flamejante"><img src="produtos/b3aee7ee4fc3.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Potinho de Geléia Flamejante à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="39" tabindex="0" aria-label="Sachês de Ketchup e Maionese Extras, R$ 0,99">
           <div class="p-info"><h3>Sachês de Ketchup e Maionese Extras</h3><strong>R$ 0,99</strong></div>
-          <div class="p-img"><img src="produtos/d3d89ec7000a.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Sachês de Ketchup e Maionese Extras"><img src="produtos/d3d89ec7000a.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Sachês de Ketchup e Maionese Extras à sacola">+</button></div>
         </article>
         
@@ -633,91 +666,91 @@
         
         <article class="produto" data-i="40" tabindex="0" aria-label="Pink Lemonade, R$ 16,00">
           <div class="p-info"><h3>Pink Lemonade</h3><p>Uma soda italiana de limão e framboesa feita pelos ninjas!</p><strong>R$ 16,00</strong></div>
-          <div class="p-img"><img src="produtos/e80bd322962f.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Pink Lemonade"><img src="produtos/e80bd322962f.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Pink Lemonade à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="41" tabindex="0" aria-label="Pilsen Puro Malte PATANEGRA, R$ 28,00">
           <div class="p-info"><h3>Pilsen Puro Malte PATANEGRA</h3><p>Growler de 1 Litro.</p><strong>R$ 28,00</strong></div>
-          <div class="p-img"><img src="produtos/4eb8d07ab4fd.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Pilsen Puro Malte PATANEGRA"><img src="produtos/4eb8d07ab4fd.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Pilsen Puro Malte PATANEGRA à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="42" tabindex="0" aria-label="Coca-Cola Original, R$ 8,00">
           <div class="p-info"><h3>Coca-Cola Original</h3><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/f9f70f79c0f4.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Coca-Cola Original"><img src="produtos/f9f70f79c0f4.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Coca-Cola Original à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="43" tabindex="0" aria-label="Coca-Cola Sem Açúcar, R$ 8,00">
           <div class="p-info"><h3>Coca-Cola Sem Açúcar</h3><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/f48d2dc92c98.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Coca-Cola Sem Açúcar"><img src="produtos/f48d2dc92c98.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Coca-Cola Sem Açúcar à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="44" tabindex="0" aria-label="Guaraná Antárctica, R$ 8,00">
           <div class="p-info"><h3>Guaraná Antárctica</h3><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/ef13aa31f940.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Guaraná Antárctica"><img src="produtos/ef13aa31f940.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Guaraná Antárctica à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="45" tabindex="0" aria-label="Sprite, R$ 8,00">
           <div class="p-info"><h3>Sprite</h3><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/fea529133ffc.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Sprite"><img src="produtos/fea529133ffc.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Sprite à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="46" tabindex="0" aria-label="Fanta Uva, R$ 8,00">
           <div class="p-info"><h3>Fanta Uva</h3><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/0b1fd0bedd27.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Fanta Uva"><img src="produtos/0b1fd0bedd27.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Fanta Uva à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="47" tabindex="0" aria-label="Suco de Laranja SUQ, R$ 8,00">
           <div class="p-info"><h3>Suco de Laranja SUQ</h3><p>270ml, 100% Natural e Pasteurizado.</p><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/a03bc4e798ff.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Suco de Laranja SUQ"><img src="produtos/a03bc4e798ff.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Suco de Laranja SUQ à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="48" tabindex="0" aria-label="Suco Del Valle Uva, R$ 8,00">
           <div class="p-info"><h3>Suco Del Valle Uva</h3><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/be53b94c1d6a.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Suco Del Valle Uva"><img src="produtos/be53b94c1d6a.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Suco Del Valle Uva à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="49" tabindex="0" aria-label="Água Mineral, R$ 5,00">
           <div class="p-info"><h3>Água Mineral</h3><strong>R$ 5,00</strong></div>
-          <div class="p-img"><img src="produtos/9180c81d9f82.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Água Mineral"><img src="produtos/9180c81d9f82.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Água Mineral à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="50" tabindex="0" aria-label="Água com Gás, R$ 5,00">
           <div class="p-info"><h3>Água com Gás</h3><strong>R$ 5,00</strong></div>
-          <div class="p-img"><img src="produtos/0ee5b5bb1931.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Água com Gás"><img src="produtos/0ee5b5bb1931.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Água com Gás à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="51" tabindex="0" aria-label="Sprite Lemon Fresh 500ml, R$ 12,00">
           <div class="p-info"><h3>Sprite Lemon Fresh 500ml</h3><strong>R$ 12,00</strong></div>
-          <div class="p-img"><img src="produtos/788b93b07578.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Sprite Lemon Fresh 500ml"><img src="produtos/788b93b07578.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Sprite Lemon Fresh 500ml à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="52" tabindex="0" aria-label="Cerveja Eisenbahn Pilsen, R$ 8,00">
           <div class="p-info"><h3>Cerveja Eisenbahn Pilsen</h3><strong>R$ 8,00</strong></div>
-          <div class="p-img"><img src="produtos/56682d63736b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Cerveja Eisenbahn Pilsen"><img src="produtos/56682d63736b.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Cerveja Eisenbahn Pilsen à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="53" tabindex="0" aria-label="Coca Cola 600ml, R$ 12,00">
           <div class="p-info"><h3>Coca Cola 600ml</h3><strong>R$ 12,00</strong></div>
-          <div class="p-img"><img src="produtos/300f61bcdc9a.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Coca Cola 600ml"><img src="produtos/300f61bcdc9a.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Coca Cola 600ml à sacola">+</button></div>
         </article>
         
         <article class="produto" data-i="54" tabindex="0" aria-label="Coca Cola Sem Açúcar 600ml, R$ 12,00">
           <div class="p-info"><h3>Coca Cola Sem Açúcar 600ml</h3><strong>R$ 12,00</strong></div>
-          <div class="p-img"><img src="produtos/996775ab774d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
+          <div class="p-img" data-editar-imagem="produto" data-item="Coca Cola Sem Açúcar 600ml"><img src="produtos/996775ab774d.jpg" alt="" loading="lazy"><span class="p-qtd" data-qtd hidden></span>
             <button type="button" class="p-add" data-add aria-label="Adicionar Coca Cola Sem Açúcar 600ml à sacola">+</button></div>
         </article>
         
@@ -767,7 +800,11 @@
       </div>
     </div>
     
-    <div class="fotos"><img src="fotos/1.jpg" alt="Foto de Ninja Hamburgueria - Burgers e Hot Dogs" loading="lazy"></div>
+    
+    <div class="galeria-local">
+      <h2>Nosso espaço</h2>
+      <div class="fotos n1"><figure data-editar-imagem="galeria"><img data-ampliar src="fotos/1.jpg" alt="Foto de Ninja Hamburgueria - Burgers e Hot Dogs" loading="lazy"></figure></div>
+    </div>
     
     
   </div>
@@ -1074,5 +1111,73 @@
   else desenhar();
 })();
 </script>
+<style>
+  img[data-ampliar] { cursor: zoom-in; }
+  .ampliar { position: fixed; inset: 0; z-index: 90; background: rgba(8, 8, 10, .92); display: grid; place-items: center; animation: amp-entrar .18s ease both; }
+  .ampliar[hidden] { display: none !important; }
+  @keyframes amp-entrar { from { opacity: 0; } }
+  .ampliar img { max-width: min(1200px, 92vw); max-height: 86vh; object-fit: contain; border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  .ampliar button { position: absolute; border: 0; cursor: pointer; color: #fff; background: rgba(255,255,255,.12); backdrop-filter: blur(6px);
+                    width: 48px; height: 48px; border-radius: 50%; font-size: 30px; line-height: 1; display: grid; place-items: center; }
+  .ampliar button:hover { background: rgba(255,255,255,.24); }
+  .amp-fechar { top: 18px; right: 18px; font-size: 26px !important; }
+  .amp-seta.esq { left: 18px; top: 50%; transform: translateY(-50%); }
+  .amp-seta.dir { right: 18px; top: 50%; transform: translateY(-50%); }
+  .amp-conta { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; font: 600 14px system-ui, sans-serif; opacity: .8; }
+  @media (max-width: 720px) { .amp-seta { display: none !important; } }
+</style>
+<div class="ampliar" id="ampliar" hidden role="dialog" aria-label="Foto ampliada">
+  <button type="button" class="amp-fechar" data-amp-fechar aria-label="Fechar">×</button>
+  <button type="button" class="amp-seta esq" data-amp-ant aria-label="Foto anterior">‹</button>
+  <img alt="">
+  <button type="button" class="amp-seta dir" data-amp-prox aria-label="Próxima foto">›</button>
+  <span class="amp-conta"></span>
+</div>
+<script>
+(function () {
+  // Clicar numa foto abre ela grande; setas, teclado e deslizar (celular) passam para as outras
+  var caixa = document.getElementById('ampliar');
+  if (!caixa) return;
+  var img = caixa.querySelector('img'), conta = caixa.querySelector('.amp-conta'), lista = [], atual = 0;
+  function mostrar(i) {
+    atual = (i + lista.length) % lista.length;
+    img.src = lista[atual].currentSrc || lista[atual].src;
+    conta.textContent = lista.length > 1 ? (atual + 1) + ' de ' + lista.length : '';
+    caixa.querySelectorAll('.amp-seta').forEach(function (b) { b.hidden = lista.length < 2; });
+  }
+  function fechar() { caixa.hidden = true; document.body.classList.remove('travado'); }
+  document.addEventListener('click', function (e) {
+    if (document.documentElement.classList.contains('editando')) return;  // no modo edição, clicar é para trocar
+    var alvo = e.target.closest('img[data-ampliar]');
+    if (!alvo) return;
+    e.preventDefault();
+    // só as fotos visíveis (a moldura da capa fica escondida quando a capa já é larga)
+    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]')).filter(function (i) { return i.offsetParent !== null; });
+    mostrar(lista.indexOf(alvo));
+    caixa.hidden = false;
+    document.body.classList.add('travado');
+  });
+  caixa.addEventListener('click', function (e) {
+    if (e.target === caixa || e.target.closest('[data-amp-fechar]')) fechar();
+    else if (e.target.closest('[data-amp-ant]')) mostrar(atual - 1);
+    else if (e.target.closest('[data-amp-prox]')) mostrar(atual + 1);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (caixa.hidden) return;
+    if (e.key === 'Escape') fechar();
+    if (e.key === 'ArrowLeft') mostrar(atual - 1);
+    if (e.key === 'ArrowRight') mostrar(atual + 1);
+  });
+  var x0 = null;
+  caixa.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  caixa.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40 && lista.length > 1) mostrar(atual + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+})();
+</script>
+
 </body>
 </html>
