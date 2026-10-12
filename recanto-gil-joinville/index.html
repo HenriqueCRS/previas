@@ -7,7 +7,7 @@
 <meta name="description" content="Pão quentinho e café fresco todos os dias">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#8b5a2b">
-<meta name="versao" content="20261012012227">
+<meta name="versao" content="20261012012648">
 <link rel="icon" href="logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Recanto Gil: prévia do novo site">
@@ -906,7 +906,8 @@
     var alvo = e.target.closest('img[data-ampliar]');
     if (!alvo) return;
     e.preventDefault();
-    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]'));
+    // só as fotos visíveis (a moldura da capa fica escondida quando a capa já é larga)
+    lista = Array.prototype.slice.call(document.querySelectorAll('img[data-ampliar]')).filter(function (i) { return i.offsetParent !== null; });
     mostrar(lista.indexOf(alvo));
     caixa.hidden = false;
     document.body.classList.add('travado');
