@@ -7,7 +7,7 @@
 <meta name="description" content="Pão quentinho e café fresco todos os dias">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#8b5a2b">
-<meta name="versao" content="20261012012140">
+<meta name="versao" content="20261012012227">
 <link rel="icon" href="logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Recanto Gil: prévia do novo site">
@@ -118,6 +118,16 @@
     display: grid; place-items: center; padding: 36px; box-shadow: 0 40px 80px -30px rgba(0,0,0,.5); z-index: 2; }
   .hero-logo img { max-height: 100%; object-fit: contain; }
   .hero.cheio .conteudo { position: relative; z-index: 3; max-width: 700px; padding: 96px 0; }
+  /* capa em pé ou pequena (as do Instagram e do Facebook): no computador, o fundo vira a própria foto desfocada
+     e a foto aparece inteira e nítida numa moldura ao lado do texto, em vez de esticada e cortada */
+  .hero-quadro { display: none; }
+  @media (min-width: 861px) {
+    .hero.estreita .hero-foto { filter: blur(28px) saturate(1.15); transform: scale(1.15); }
+    .hero.estreita .container { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+    .hero.estreita .hero-quadro { display: block; position: relative; z-index: 3; flex: 0 0 auto; height: min(500px, 72vh); border-radius: 28px;
+      overflow: hidden; border: 6px solid rgba(255,255,255,.16); box-shadow: 0 40px 90px -30px rgba(0,0,0,.75); }
+    .hero.estreita .hero-quadro img { display: block; height: 100%; width: auto; max-width: 520px; object-fit: cover; cursor: zoom-in; }
+  }
 
   .hero.dividido { padding: 72px 0 88px; background: radial-gradient(circle at 100% 0%, #e3ceb4 0%, transparent 55%), var(--fundo); }
   .hero.dividido .container { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
@@ -437,8 +447,18 @@
 </div>
 
     </div>
+    <div class="hero-quadro"><img src="banner.jpg" data-capa data-ampliar alt="Recanto Gil"></div>
   </div>
 </section>
+<script>(function () {
+  var bloco = document.currentScript.previousElementSibling, img = bloco && bloco.querySelector('img[data-capa]');
+  if (!img) return;
+  function ver() {
+    var l = img.naturalWidth, a = img.naturalHeight;
+    if (l && (l / a < 1.25 || l < 1000)) bloco.classList.add('estreita');
+  }
+  if (img.complete) ver(); else img.addEventListener('load', ver);
+})();</script>
 
 
 <section class="faixa">
