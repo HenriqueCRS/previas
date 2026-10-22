@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="versao" content="78fe78caa3ba">
+<title>Agenda online para barbearias · demonstração</title>
+<meta property="og:title" content="Agenda online para barbearias · demonstração">
+<meta property="og:description" content="Toque para testar o app no celular.">
+<noscript><meta http-equiv="refresh" content="0; url=https://agenda-barbearia.pages.dev/demo/"></noscript>
+<script>
+  // Avisa no ntfy (com o número do comércio que veio no link) e leva para a demonstração.
+  // Quem já abriu uma prévia com ?eu=1 neste navegador não conta como visita, como nas prévias.
+  (function () {
+    var D = {"destino": "https://agenda-barbearia.pages.dev/demo/", "ntfy": "https://ntfy.sh/buscas-af8141b474638e425c7e", "titulo": "Abriu a demonstração do app de agenda"};
+    try {
+      var p = new URLSearchParams(location.search), c = p.get('c') || '';
+      if (p.has('eu')) localStorage.setItem('previa-eu', '1');
+      var souEu = localStorage.getItem('previa-eu') === '1';
+      if (/^\d+$/.test(c) && !souEu) {
+        // o texto vai para a linha do tempo do comércio no buscador; o número só no título da notificação do celular
+        var q = new URLSearchParams({ title: 'Comércio ' + c, tags: ['iphone', 'demo', 'lead-' + c].join(','), priority: '4' });
+        fetch(D.ntfy + '?' + q.toString(), { method: 'POST', body: D.titulo, mode: 'no-cors', keepalive: true });
+      }
+    } catch (e) { /* sem rede ou sem armazenamento: só abre a demonstração */ }
+    setTimeout(function () { location.replace(D.destino); }, 400);
+  })();
+</script>
+<style>body{font:16px/1.5 system-ui,sans-serif;margin:0;display:grid;place-items:center;min-height:100vh;background:#f4f4f5;color:#18181b}a{color:#2563eb}</style>
+</head>
+<body><p>Abrindo a demonstração… <a href="https://agenda-barbearia.pages.dev/demo/">toque aqui se não abrir</a></p></body>
+</html>
